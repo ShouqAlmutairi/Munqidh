@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "الرئيسية";
+}
+
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm text-center">
+    <h1 class="display-6 fw-bold">🛡️ ScamShield AI</h1>
+    <p class="lead">منصة ذكية لاكتشاف الاحتيال الرقمي والتصيد الإلكتروني باللغة العربية</p>
+    <a class="btn btn-primary btn-lg mt-3" asp-controller="Analyze" asp-action="Index">ابدئي التحليل الآن</a>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">📩 المشكلة</h5>
+                <p class="card-text">
+                    رسائل احتيالية منتشرة تنتحل صفة جهات رسمية (بنوك، أبشر، شركات شحن)
+                    ويصعب على المستخدم العادي معرفة إذا كانت حقيقية أو مزيفة.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">🧠 الحل</h5>
+                <p class="card-text">
+                    النظام يحلل نص الرسالة، يبحث عن مؤشرات الاحتيال (كلمات، روابط، استعجال)،
+                    ويحسب درجة خطورة فورية مع الأسباب.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">🔐 الأمن السيبراني</h5>
+                <p class="card-text">
+                    استخراج مؤشرات الاختراق (IOCs) مثل الروابط وعناوين IP، وفحص الروابط
+                    (HTTPS، اختصار روابط، نطاقات مشبوهة).
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

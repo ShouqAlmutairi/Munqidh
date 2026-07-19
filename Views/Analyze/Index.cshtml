@@ -1,0 +1,85 @@
+<!-- Mounqith/Views/Analyze/Index.cshtml -->
+@{
+    ViewData["Title"] = "تحليل رسالة";
+}
+
+<div class="max-w-3xl mx-auto space-y-8">
+    
+    <!-- قسم الشعار التوضيحي المضيء -->
+    <div class="text-center space-y-4">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-blue-400 mb-2 shadow-inner shadow-blue-500/5">
+            <i class="bi bi-cpu text-4xl animate-pulse"></i>
+        </div>
+        <h1 class="text-3xl font-extrabold text-white tracking-tight">منظومة فحص الرسائل الذكية</h1>
+        <p class="text-gray-400 max-w-md mx-auto text-sm leading-relaxed">
+            الوقاية الرقمية تبدأ هنا. الصق نص رسالة الـ SMS، الواتساب، أو البريد الإلكتروني المشبوه لتحليله فوراً عبر خوارزميات الذكاء الاصطناعي.
+        </p>
+    </div>
+
+    <!-- عرض أخطاء التحقق (Validation Errors) بشكل متناسق مع الواجهة السيبرانية -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-sm text-red-400 space-y-1 flex items-start gap-3">
+            <i class="bi bi-exclamation-triangle-fill text-lg shrink-0"></i>
+            <div>
+                @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div class="font-medium">@err.ErrorMessage</div>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- صندوق النموذج البرمجي الاحترافي -->
+    <div class="bg-[#1f2937]/40 border border-gray-800 rounded-2xl p-6 shadow-2xl backdrop-blur-sm">
+        <form method="post" asp-controller="Analyze" asp-action="Index" class="space-y-6">
+            @Html.AntiForgeryToken()
+            
+            <div class="space-y-2">
+                <label class="text-sm font-semibold text-gray-300 flex items-center gap-2">
+                    <i class="bi bi-chat-left-text text-blue-400 text-base"></i> الصق نص الرسالة هنا (SMS / واتساب / بريد إلكتروني):
+                </label>
+                <textarea name="messageText" rows="6" 
+                          class="w-full bg-[#111827] border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-right text-sm leading-relaxed"
+                          placeholder="مثال: تم إيقاف حسابك البنكي، يرجى تحديث بياناتك فورًا عبر الرابط التالي..."></textarea>
+            </div>
+
+            <!-- أزرار الإجراء والرسومات المساعدة بالأسفل -->
+            <div class="flex items-center justify-between pt-2">
+                <div class="flex items-center gap-2 text-xs text-gray-400">
+                    <i class="bi bi-shield-check text-green-400 text-sm"></i> فحص آمن ومحمي ومحلي 100%
+                </div>
+                
+                <button type="submit" class="flex items-center gap-2 bg-gradient-to-l from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-blue-500/20 transform hover:-translate-y-0.5 text-sm">
+                    <span>بدء التحليل الفوري</span>
+                    <i class="bi bi-arrow-left-short text-xl"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- بطاقات توضيحية سريعة بالأسفل لإعطاء لمسة تطبيق حقيقي -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-gray-400">
+        <div class="bg-[#111827]/60 p-4 rounded-xl border border-gray-800/80 flex items-start gap-3">
+            <i class="bi bi-hash text-blue-400 text-base shrink-0"></i>
+            <div>
+                <h4 class="font-bold text-gray-300 mb-1">فحص الروابط المخفية</h4>
+                <p>يكتشف روابط التصيد النصي المقنعة وعناوين URL المزيفة بدقة.</p>
+            </div>
+        </div>
+        <div class="bg-[#111827]/60 p-4 rounded-xl border border-gray-800/80 flex items-start gap-3">
+            <i class="bi bi-exclamation-circle text-amber-400 text-base shrink-0"></i>
+            <div>
+                <h4 class="font-bold text-gray-300 mb-1">الهندسة الاجتماعية</h4>
+                <p>تتبع عبارات التهديد، الاستعجال، والجوائز الوهمية المنتشرة.</p>
+            </div>
+        </div>
+        <div class="bg-[#111827]/60 p-4 rounded-xl border border-gray-800/80 flex items-start gap-3">
+            <i class="bi bi-lightning-charge text-indigo-400 text-base shrink-0"></i>
+            <div>
+                <h4 class="font-bold text-gray-300 mb-1">تحليل فوري</h4>
+                <p>يتم الفحص ومعالجة التهديدات المحتملة فوراً بدون تأخير.</p>
+            </div>
+        </div>
+    </div>
+</div>

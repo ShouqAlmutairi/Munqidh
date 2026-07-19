@@ -1,0 +1,100 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "لوحة التحكم";
+}
+
+<div class="space-y-8 animate-fade-in">
+    
+    <!-- العنوان الرئيسي -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
+                <i class="bi bi-bar-chart-line text-blue-500"></i> لوحة الإحصائيات الأمنية
+            </h1>
+            <p class="text-sm text-gray-400 mt-1">نظرة عامة على البيانات التي تم رصدها وتحليلها بواسطة منظومة مُنقذك.</p>
+        </div>
+        <div class="text-xs bg-[#1f2937]/60 text-gray-400 px-3 py-1.5 rounded-full border border-gray-800">
+            <i class="bi bi-clock-history text-blue-400 m-1"></i> التحديث: فوري حي
+        </div>
+    </div>
+
+    <!-- شبكة بطاقات الإحصائيات الرقمية مع الأيقونات الرسومية -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        <!-- إجمالي العمليات المفحوصة -->
+        <div class="bg-[#1f2937]/40 border border-gray-800 rounded-2xl p-5 flex items-center justify-between shadow-lg shadow-black/20">
+            <div class="space-y-1">
+                <span class="text-xs text-gray-400 font-semibold">إجمالي المفحوص</span>
+                <h3 class="text-3xl font-bold text-white tracking-tight">@Model.TotalMessages</h3>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-xl border border-blue-500/20 shadow-inner">
+                <i class="bi bi-shield-shaded"></i>
+            </div>
+        </div>
+
+        <!-- إجمالي الاحتيال المكتشف -->
+        <div class="bg-[#1f2937]/40 border border-red-900/40 rounded-2xl p-5 flex items-center justify-between shadow-lg shadow-black/20">
+            <div class="space-y-1">
+                <span class="text-xs text-gray-400 font-semibold">رسائل احتيالية</span>
+                <h3 class="text-3xl font-bold text-red-500 tracking-tight">@Model.ScamCount</h3>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 text-xl border border-red-500/20 shadow-inner">
+                <i class="bi bi-bug-fill"></i>
+            </div>
+        </div>
+
+        <!-- روابط التصيد المحجوبة / المشبوهة -->
+        <div class="bg-[#1f2937]/40 border border-amber-900/40 rounded-2xl p-5 flex items-center justify-between shadow-lg shadow-black/20">
+            <div class="space-y-1">
+                <span class="text-xs text-gray-400 font-semibold">رسائل مشبوهة</span>
+                <h3 class="text-3xl font-bold text-amber-500 tracking-tight">@Model.SuspiciousCount</h3>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 text-xl border border-amber-500/20 shadow-inner">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+        </div>
+
+        <!-- معدل السلامة والرسائل الآمنة -->
+        <div class="bg-[#1f2937]/40 border border-green-900/40 rounded-2xl p-5 flex items-center justify-between shadow-lg shadow-black/20">
+            <div class="space-y-1">
+                <span class="text-xs text-gray-400 font-semibold">رسائل آمنة</span>
+                <h3 class="text-3xl font-bold text-green-500 tracking-tight">@Model.SafeCount</h3>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center text-green-400 text-xl border border-green-500/20 shadow-inner">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم الكلمات المفتاحية الأكثر استخداماً -->
+    <div class="bg-[#1f2937]/30 border border-gray-800 rounded-2xl p-6 shadow-2xl backdrop-blur-sm">
+        <h3 class="text-base font-bold text-gray-200 mb-4 flex items-center gap-2">
+            <i class="bi bi-tags text-indigo-400"></i> المؤشرات السيبرانية (أكثر الكلمات المفتاحية رصداً)
+        </h3>
+        
+        @if (!Model.TopKeywords.Any())
+        {
+            <div class="text-center py-8 text-gray-500 text-sm flex flex-col items-center gap-2">
+                <i class="bi bi-inbox text-3xl text-gray-600"></i>
+                <span>لا توجد بيانات كافية أو كلمات مفتاحية مرصودة بعد.</span>
+            </div>
+        }
+        else
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                @foreach (var kw in Model.TopKeywords)
+                {
+                    <div class="bg-[#111827]/60 border border-gray-800/80 rounded-xl px-4 py-3 flex items-center justify-between hover:border-gray-700 transition">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            <span class="text-sm font-medium text-white">@kw.Key</span>
+                        </div>
+                        <span class="bg-blue-600/10 text-blue-400 border border-blue-500/30 text-xs font-bold px-2.5 py-1 rounded-full">
+                            تكرار: @kw.Value
+                        </span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,152 @@
+@model AnalysisResultViewModel
+@{
+    ViewData["Title"] = "نتيجة التحليل";
+
+    // تحديد الألوان السيبرانية بناءً على نوع التهديد
+    string themeClass = Model.ResultLabel switch
+    {
+        "Scam" => "border-red-500/30 bg-red-500/5 text-red-400",
+        "Suspicious" => "border-amber-500/30 bg-amber-500/5 text-amber-400",
+        _ => "border-green-500/30 bg-green-500/5 text-green-400"
+    };
+
+    string barColor = Model.ResultLabel switch
+    {
+        "Scam" => "bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.5)]",
+        "Suspicious" => "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]",
+        _ => "bg-green-500 shadow-[0_0_12px_rgba(34,197,94,0.5)]"
+    };
+
+    string icon = Model.ResultLabel switch
+    {
+        "Scam" => "bi-shield-x text-5xl text-red-500 animate-bounce",
+        "Suspicious" => "bi-exclamation-triangle text-5xl text-amber-500",
+        _ => "bi-shield-check text-5xl text-green-400"
+    };
+}
+
+<div class="max-w-4xl mx-auto space-y-6 animate-fade-in">
+    
+    <!-- رأس الصفحة -->
+    <div>
+        <h1 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
+            <i class="bi bi-bar-chart text-blue-500"></i> تفاصيل تقرير التحليل
+        </h1>
+        <p class="text-sm text-gray-400 mt-1">التقرير الأمني الصادر عن أنظمة الذكاء الاصطناعي لفحص المحتوى المشبوه.</p>
+    </div>
+
+    <!-- بطاقة مستوى الخطورة والنسبة المئوية -->
+    <div class="border rounded-2xl p-6 backdrop-blur-sm shadow-xl @themeClass">
+        <div class="flex flex-col items-center text-center space-y-3 mb-6">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-900/50 border border-gray-800 shadow-inner">
+                <i class="bi @icon"></i>
+            </div>
+            <h2 class="text-2xl font-bold">مستوى الخطورة: @Model.RiskLevel</h2>
+            <p class="text-sm opacity-80">نسبة الاحتيال المكتشفة: @Model.RiskScore%</p>
+        </div>
+
+        <!-- شريط التقدم الاحترافي الاحترافي (Progress Bar) -->
+        <div class="w-full bg-[#111827] rounded-full h-4 overflow-hidden border border-gray-800/80 p-0.5">
+            <div class="h-full rounded-full transition-all duration-1000 @barColor" style="width: @Model.RiskScore%"></div>
+        </div>
+    </div>
+
+    <!-- صندوق الرسالة الأصلية المفحوصة -->
+    <div class="bg-[#1f2937]/30 border border-gray-800 rounded-2xl p-5 shadow-lg backdrop-blur-sm">
+        <h4 class="text-xs text-gray-500 font-semibold mb-2 uppercase tracking-wider flex items-center gap-1">
+            <i class="bi bi-chat-left-quote text-blue-400"></i> الرسالة الأصلية:
+        </h4>
+        <p class="text-sm text-white leading-relaxed italic bg-[#111827]/80 border border-gray-800/60 rounded-xl p-4">
+            "@Model.OriginalMessage"
+        </p>
+    </div>
+
+    <!-- قسم تحليل الأسباب المكتشفة -->
+    <div class="bg-[#1f2937]/30 border border-gray-800 rounded-2xl p-5 shadow-lg">
+        <h4 class="text-sm font-bold text-gray-200 mb-3 flex items-center gap-2">
+            <i class="bi bi-clipboard-data text-indigo-400"></i> المؤشرات والمسببات الأمنية
+        </h4>
+        <ul class="space-y-2">
+            @if (Model.Reasons.Any())
+            {
+                foreach (var reason in Model.Reasons)
+                {
+                    <li class="bg-[#111827]/50 border border-gray-800/60 rounded-xl px-4 py-3 text-sm text-gray-300 flex items-start gap-2">
+                        <i class="bi bi-exclamation-circle text-amber-500 shrink-0 mt-0.5"></i>
+                        <span>@reason</span>
+                    </li>
+                }
+            }
+            else
+            {
+                <li class="bg-[#111827]/50 border border-gray-850 rounded-xl px-4 py-3 text-sm text-gray-400 text-center flex items-center justify-center gap-2">
+                    <i class="bi bi-check-circle text-green-500"></i>
+                    <span>لم يتم العثور على مؤشرات احتيال أو أنماط هندسة اجتماعية واضحة.</span>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <!-- روابط مؤشرات الاختراق (IOC) - إن وُجدت -->
+    @if (Model.ExtractedUrls.Any())
+    {
+        <div class="bg-[#1f2937]/30 border border-gray-800 rounded-2xl p-5 shadow-lg overflow-hidden">
+            <h4 class="text-sm font-bold text-gray-200 mb-3 flex items-center gap-2">
+                <i class="bi bi-link-45deg text-blue-400"></i> الروابط المستخرجة ومؤشرات الاختراق (IOC)
+            </h4>
+            <div class="overflow-x-auto text-xs text-gray-300">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-800 text-gray-400 text-xs">
+                            <th class="pb-3 font-semibold">الرابط المستخرج</th>
+                            <th class="pb-3 font-semibold text-center">بروتوكول HTTPS</th>
+                            <th class="pb-3 font-semibold text-center">أداة اختصار؟</th>
+                            <th class="pb-3 font-semibold text-left">مشبوه؟</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800/40">
+                        @foreach (var u in Model.UrlChecks)
+                        {
+                            <tr class="hover:bg-gray-800/10">
+                                <td class="py-3 font-mono text-white text-xs break-all max-w-xs">@u.Url</td>
+                                <td class="py-3 text-center">@(u.IsHttps ? "✅ آمن" : "❌ غير مشفر")</td>
+                                <td class="py-3 text-center text-amber-400">@(u.IsShortener ? "⚠️ نعم" : "لا")</td>
+                                <td class="py-3 text-left font-bold @(u.LooksSuspicious ? "text-red-400" : "text-gray-400")">
+                                    @(u.LooksSuspicious ? "⚠️ محتمل جداً" : "مستقر")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    <!-- عناوين IP المستخرجة (IOC) - إن وُجدت -->
+    @if (Model.ExtractedIps.Any())
+    {
+        <div class="bg-[#1f2937]/30 border border-gray-800 rounded-2xl p-5 shadow-lg">
+            <h4 class="text-sm font-bold text-gray-200 mb-3 flex items-center gap-2">
+                <i class="bi bi-globe2 text-teal-400"></i> عناوين IP المستخرجة (IOC)
+            </h4>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                @foreach (var ip in Model.ExtractedIps)
+                {
+                    <div class="bg-[#111827]/60 border border-gray-800 rounded-xl px-3 py-2 text-xs font-mono text-center text-white">
+                        <i class="bi bi-terminal text-teal-500 m-1"></i> @ip
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- أزرار التنقل السفلية المحدثة ستايلها -->
+    <div class="flex gap-4 pt-2">
+        <a asp-controller="Analyze" asp-action="Index" class="flex-1 text-center bg-gray-800 hover:bg-gray-750 text-white font-semibold py-3 rounded-xl transition text-sm">
+            <i class="bi bi-search text-xs m-1"></i> فحص رسالة أخرى
+        </a>
+        <a asp-controller="Analyze" asp-action="History" class="flex-1 text-center bg-gradient-to-l from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-blue-500/10 text-sm">
+            استعراض سجل الفحص <i class="bi bi-clock-history text-xs m-1"></i>
+        </a>
+    </div>
+</div>
